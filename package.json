@@ -1,7 +1,7 @@
 {
   "name": "yux-storage",
-  "version": "1.0.1",
-  "description": "yux-storage 是一个基于 HTML5 IndexedDB 封装的 Web 数据本地离线存储库",
+  "version": "1.0.2",
+  "description": "yux-storage 是一个基于 HTML5 IndexedDB 封装的 Web 本地数据离线存储库",
   "main": "yux-storage.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,7 +12,9 @@
   },
   "keywords": [
     "indexedDB",
-    "storage"
+    "storage",
+    "localStorage",
+    "yux"
   ],
   "author": "XboxYan",
   "license": "MIT",

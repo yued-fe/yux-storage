@@ -1,12 +1,12 @@
 # yux-storage
 
-yux-storage 是一个基于 HTML5 [IndexedDB](https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API) 封装的 Web 数据本地离线存储库。
+yux-storage 是一个基于 HTML5 [IndexedDB](https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API) 封装的 Web 本地数据离线存储库。
 
 
 ## 特点
 
-1. 使用类似 [localStorage API](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/localStorage)， 无需考虑 IndexedDB 的概念，上手无压力。
-1. 支持回调和 [Promises](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise) 两种方式，各凭所愿。
+1. 使用类似 [localStorage API](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/localStorage)， 无需考虑 IndexedDB 的复杂概念，上手无压力。
+1. 支持回调和 [Promise](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise) 两种方式，各凭所愿。
 1. 非常轻量，100 行左右的源码，压缩后更小。
 
 以下是继承 IndexedDB 的特点
@@ -28,7 +28,7 @@ yux-storage 是一个基于 HTML5 [IndexedDB](https://developer.mozilla.org/zh-C
 2. 通过 [npm](https://www.npmjs.com/package/yux-storage) 安装
 
 ```cmd
-npm install yux-storage
+npm i yux-storage
 ```
 
 ### 使用
@@ -133,7 +133,6 @@ yuxStorage.setItem('my array', [1, 2, 'three']).then(function(value) {
 yuxStorage.setItem([1,2,3], [1, 2, 'three'])
 
 // 还可以存储 file 文件
-
 const file = new File(["foo"], "foo.txt", {
     type: "text/plain",
 });
@@ -167,7 +166,7 @@ yuxStorage.clear(successCallback)
 
 从数据库中删除所有的 key，重置数据库。
 
-> 其实就是遍历，然后执行 REMOVEITEM
+> 小心使用，本质就是遍历，然后执行 REMOVEITEM
 
 *示例*
 
@@ -184,9 +183,11 @@ yuxStorage.clear().then(function() {
 yuxStorage.key(keyIndex, successCallback)
 ```
 
-根据 key 的索引获取其名
+根据 key 的索引获取键的名称。
 
 >  有些鸡肋的方法，很多时候我们不知道键的索引。
+
+*示例*
 
 ```js
 yuxStorage.key(2).then(function(keyName) {
@@ -201,13 +202,22 @@ yuxStorage.key(2).then(function(keyName) {
 yuxStorage.keys(successCallback)
 ```
 
-获取数据仓库中所有的 key。
+获取数据仓库中所有的 key，返回一个数组。
 
 >  localStorage API 并没有这个方法，但比上面的 key 要有用的多。
 
+*示例*
+
+```js
+yuxStorage.keys().then(function(keyNames) {
+    // key 名
+    console.log(keyNames);
+})
+```
+
 ## 兼容性
 
-不支持 `IE`
+现代浏览器，不支持 `IE`
 
 > 兼容性取决于 [indexedDB](https://caniuse.com/?search=indexedDB) 和 [Promise](https://caniuse.com/?search=Promise)
 
@@ -219,7 +229,7 @@ yuxStorage.keys(successCallback)
 Uncaught ReferenceError: yuxStorage is not defined
 ```
 
-这时，只需要将方法放在 `new yuxDB()` 的回调或者 Promise 
+这时，只需要将方法放在 `new yuxDB()` 的回调或者 Promise 后续流程
 
 ```js
 new yuxDB().then(function(yuxStorage){
@@ -246,8 +256,10 @@ new YuxDB(function(yuxStorage){
 import yuxDB from 'yux-storage'
 ```
 
-> yuxDB 是整个库的构造函数，new YuxDB() 返回的是一个 Promise 对象， 初始完成后返回的 yuxStorage 才具备以上 API 的各种方法
+> yuxDB 是整个库的构造函数，new yuxDB() 返回的是一个 Promise 对象， 初始完成后回调生成的 yuxStorage 才具备以上 API 的各种方法
 
 ## 联系我
 
 有相关问题或者意见可与我联系 yanwenbin@yuewen.com
+
+^ ^

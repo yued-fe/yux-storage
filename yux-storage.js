@@ -1,3 +1,9 @@
+/**
+ * @yux-storage.js
+ * @author xboxyan
+ * Created: 20-11-10
+ */
+
 class yuxDB {
 
     constructor(successCallback) {
@@ -19,14 +25,14 @@ class yuxDB {
                 }
             };
             request.onerror = (event) => {
-                reject(event)
+                reject(event);
             }
         })
     }
 
     setItem(key, value, successCallback) {
         return new Promise((resolve, reject) => {
-            const request = this.db.transaction([this.objectStoreName], 'readwrite').objectStore(this.objectStoreName).put(value, key);
+            const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).put(value, key);
             request.onsuccess = (event) => {
                 if (successCallback && typeof successCallback === 'function') {
                     successCallback(value);
@@ -34,14 +40,14 @@ class yuxDB {
                 resolve(value);
             };
             request.onerror = (event) => {
-                reject(event)
+                reject(event);
             }
         })
     }
 
     getItem(key, successCallback) {
         return new Promise((resolve, reject) => {
-            const request = this.db.transaction([this.objectStoreName]).objectStore(this.objectStoreName).get(key);
+            const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).get(key);
             request.onsuccess = (event) => {
                 if (successCallback && typeof successCallback === 'function') {
                     successCallback(request.result || null);
@@ -49,14 +55,14 @@ class yuxDB {
                 resolve(request.result || null);
             };
             request.onerror = (event) => {
-                reject(event)
+                reject(event);
             }
         })
     }
 
     removeItem(key, successCallback) {
         return new Promise((resolve, reject) => {
-            const request = this.db.transaction([this.objectStoreName], 'readwrite').objectStore(this.objectStoreName).delete(key);
+            const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).delete(key);
             request.onsuccess = (event) => {
                 if (successCallback && typeof successCallback === 'function') {
                     successCallback(equest.result || null);
@@ -64,7 +70,7 @@ class yuxDB {
                 resolve();
             };
             request.onerror = (event) => {
-                reject(event)
+                reject(event);
             }
         })
     }
@@ -79,7 +85,7 @@ class yuxDB {
                 resolve(request.result[index]);
             };
             request.onerror = (event) => {
-                reject(event)
+                reject(event);
             }
         })
     }
@@ -89,12 +95,12 @@ class yuxDB {
             const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).getAllKeys();
             request.onsuccess = (event) => {
                 if (successCallback && typeof successCallback === 'function') {
-                    successCallback(request.result || null);
+                    successCallback(request.result || []);
                 }
-                resolve(request.result);
+                resolve(request.result || []);
             };
             request.onerror = (event) => {
-                reject(event)
+                reject(event);
             }
         })
     }
