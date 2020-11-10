@@ -15,15 +15,33 @@ yux-storage 是一个基于 HTML5 [IndexedDB](https://developer.mozilla.org/zh-C
 3. 储存空间大，一般来说不少于 250MB，甚至没有上限。
 2. 异步操作，在进行大量数据存取时不会阻塞应用程序。
 
-## 使用
+## 快速开始
 
-直接在页面上引用 yuxStorage.js
+### 安装
+
+1. 直接在 [github](https://github.com/yued-fe/yux-storage) 获取 yux-storage.js
 
 ```html
-<script src="yuxStorage.js"></script>
+<script src="yux-storage.js"></script>
 ```
 
-使用
+2. 通过 [npm](https://www.npmjs.com/package/yux-storage) 安装
+
+```cmd
+npm install yux-storage
+```
+
+### 使用
+
+通过 script 引用，会得到一个全局变量 `yuxStorage`
+
+通过 npm 安装，需要 import 导入
+
+```js
+import 'yux-storage';
+```
+
+在页面中使用
 
 ```js
 // 回调函数
@@ -195,22 +213,22 @@ yuxStorage.keys(successCallback)
 
 ## 注意事项
 
-默认引用该文件后，内部会暴露一个全局变量 yuxStorage，由于 indexedDB 的打开和初始化都是异步的，可能会出现以下报错
+默认情况下，内部会暴露一个全局变量 yuxStorage，由于 indexedDB 的打开或者创建都是异步的，可能会出现以下报错
 
 ```js
 Uncaught ReferenceError: yuxStorage is not defined
 ```
 
-这时，只需要将方法放在 `new YuxDB()` 的回调或者 Promise 
+这时，只需要将方法放在 `new yuxDB()` 的回调或者 Promise 
 
 ```js
-new YuxDB().then(function(yuxStorage){
+new yuxDB().then(function(yuxStorage){
     // 初始化完成
     yuxStorage.getItem('somekey')
 })
 
 // async
-yuxStorage = await new YuxDB();
+yuxStorage = await new yuxDB();
 // 初始化完成
 yuxStorage.getItem('somekey')
 
@@ -222,7 +240,13 @@ new YuxDB(function(yuxStorage){
 })
 ```
 
-> YuxDB 是整个库的构造函数，new YuxDB() 返回的是一个 Promise 对象， 初始完成后返回的 yuxStorage 才具备以上 API 的各种方法
+如果是 import 导入，这需要将 yuxDB 导出
+
+```js
+import yuxDB from 'yux-storage'
+```
+
+> yuxDB 是整个库的构造函数，new YuxDB() 返回的是一个 Promise 对象， 初始完成后返回的 yuxStorage 才具备以上 API 的各种方法
 
 ## 联系我
 

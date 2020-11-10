@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./yux-storage.js"></script>
+    <script>
+
+        // new DB().then((db)=>{
+        //     return db.setItem('a2',{a:133,b:2,c:3})
+        // }).then((db)=>{
+        //     return db.getItem('a2')
+        // }).then(res => {
+        //     console.log(res)
+        // })
+
+
+        var file = new File(["foo"], "foo.txt", {
+            type: "text/plain",
+        });
+
+        const init = async () => {
+
+            const db = await new yuxDB();
+            await db.setItem('A', file);
+            const A = await db.getItem('A');
+            console.log(A)
+            await db.setItem('B', 'BBB');
+            const B = await db.getItem('B');
+            console.log(B)
+            await db.setItem([1,2,3], [1, 2, 3, 4, 5]);
+            const C = await db.getItem('C');
+            console.log(C)
+            const keys = await db.key()
+            console.log(keys)
+            // db.clear()
+
+        }
+        init()
+
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
