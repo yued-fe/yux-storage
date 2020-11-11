@@ -25,7 +25,13 @@ yux-storage 是一个基于 HTML5 [IndexedDB](https://developer.mozilla.org/zh-C
 <script src="yux-storage.js"></script>
 ```
 
-2. 通过 [npm](https://www.npmjs.com/package/yux-storage) 安装
+2. 直接使用 unpkg [在线链接](https://unpkg.com/yux-storage)
+
+```html
+<script src="https://unpkg.com/yux-storage"></script>
+```
+
+3. 通过 [npm](https://www.npmjs.com/package/yux-storage) 安装
 
 ```cmd
 npm i yux-storage
@@ -48,12 +54,14 @@ import 'yux-storage';
 yuxStorage.getItem('key',doSomethingElse)
 
 // 同样支持promise
-yuxStorage.setItem('key').then(doSomethingElse)
+yuxStorage.getItem('key').then(doSomethingElse)
 
 // 如果你的环境支持async，那么
 const value = await yuxStorage.getItem('key')
 console.log(value)
 ```
+
+> 如果出现报错，可查看下面的[注意事项](#注意事项)
 
 ## API
 
@@ -191,7 +199,7 @@ yuxStorage.key(keyIndex, successCallback)
 
 ```js
 yuxStorage.key(2).then(function(keyName) {
-    // key 名
+    // key名
     console.log(keyName);
 })
 ```
@@ -210,7 +218,7 @@ yuxStorage.keys(successCallback)
 
 ```js
 yuxStorage.keys().then(function(keyNames) {
-    // key 名
+    // 所有的key名
     console.log(keyNames);
 })
 ```
@@ -223,13 +231,13 @@ yuxStorage.keys().then(function(keyNames) {
 
 ## 注意事项
 
-默认情况下，内部会暴露一个全局变量 yuxStorage，由于 indexedDB 的打开或者创建都是异步的，可能会出现以下报错
+默认情况下，内部会暴露一个全局变量 yuxStorage，由于 indexedDB 的打开或者创建都是异步的，如果在页面加载后立即调用以上 API，可能会出现以下报错
 
 ```js
 Uncaught ReferenceError: yuxStorage is not defined
 ```
 
-这时，只需要将方法放在 `new yuxDB()` 的回调或者 Promise 后续流程
+这时，只需要将方法放在 `new yuxDB()` 的回调或者 Promise 后续流程就可以了
 
 ```js
 new yuxDB().then(function(yuxStorage){
@@ -244,7 +252,7 @@ yuxStorage.getItem('somekey')
 
 
 // 回调方式
-new YuxDB(function(yuxStorage){
+new yuxDB(function(yuxStorage){
     // 初始化完成
     yuxStorage.getItem('somekey')
 })

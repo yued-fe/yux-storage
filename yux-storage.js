@@ -1,6 +1,7 @@
 /**
  * @yux-storage.js
  * @author xboxyan
+ * @email yanwenbin1991@live.com
  * Created: 20-11-10
  */
 

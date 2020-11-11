@@ -8,6 +8,7 @@
 </head>
 <body>
     <h1>yux-storage</h1>
+    
     <script src="./yux-storage.js"></script>
     <script>
 
@@ -36,7 +37,7 @@
             await db.setItem([1,2,3], [1, 2, 3, 4, 5]);
             const C = await db.getItem('C');
             console.log(C)
-            const keys = await db.key()
+            const keys = await db.keys()
             console.log(keys)
             // db.clear()
 
