@@ -21,30 +21,34 @@
         // })
 
 
-        var file = new File(["foo"], "foo.txt", {
-            type: "text/plain",
-        });
+        // var file = new File(["foo"], "foo.txt", {
+        //     type: "text/plain",
+        // });
 
-        const init = async () => {
+        // const init = async () => {
 
-            const db = await new yuxDB();
-            await db.setItem('A', file);
-            const A = await db.getItem('A');
-            console.log(A)
-            await db.setItem('B', 'BBB');
-            const B = await db.getItem('B');
-            console.log(B)
-            await db.setItem([1,2,3], [1, 2, 3, 4, 5]);
-            const C = await db.getItem('C');
-            console.log(C)
-            const keys = await db.keys()
-            console.log(keys)
-            // db.clear()
+        //     const db = await new yuxDB();
+        //     await db.setItem('A', file);
+        //     const A = await db.getItem('A');
+        //     console.log(A)
+        //     await db.setItem('B', 'BBB');
+        //     const B = await db.getItem('B');
+        //     console.log(B)
+        //     await db.setItem([1,2,3], [1, 2, 3, 4, 5]);
+        //     const C = await db.getItem('C');
+        //     console.log(C)
+        //     const keys = await db.keys()
+        //     console.log(keys)
+        //     // db.clear()
 
-        }
-        init()
+        // }
+        // init()
 
+        console.log(yuxStorage)
 
+        yuxStorage.setItem('xboxyan',[1,2,3],function(err,value){
+            console.log(err,value)
+        })
     </script>
 </body>
 </html>

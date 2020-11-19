@@ -7,138 +7,172 @@
 
 class yuxDB {
 
-    constructor(successCallback) {
-        return new Promise((resolve, reject) => {
-            this.objectStoreName = 'yux-store';
-            const request = window.indexedDB.open('yux-project', 1);
+    constructor() {
+        this.ready()
+    }
 
-            request.onsuccess = (event) => {
-                this.db = event.target.result;
-                if (successCallback && typeof successCallback === 'function') {
-                    successCallback(this);
-                }
+    ready(){
+        return new Promise((resolve, reject) => {
+            if( this.db ){
                 resolve(this)
-            };
-            request.onupgradeneeded = (event) => {
-                const db = event.target.result;
-                if (!db.objectStoreNames.contains(this.objectStoreName)) {
-                    db.createObjectStore(this.objectStoreName);
+            }else{
+                this.objectStoreName = 'yux-store';
+                const request = window.indexedDB.open('yux-project', 1);
+    
+                request.onsuccess = (event) => {
+                    this.db = event.target.result;
+                    resolve(this)
+                };
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains(this.objectStoreName)) {
+                        db.createObjectStore(this.objectStoreName);
+                    }
+                };
+                request.onerror = (event) => {
+                    reject(event);
                 }
-            };
-            request.onerror = (event) => {
-                reject(event);
             }
         })
     }
 
-    setItem(key, value, successCallback) {
-        return new Promise((resolve, reject) => {
-            const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).put(value, key);
-            request.onsuccess = (event) => {
-                if (successCallback && typeof successCallback === 'function') {
-                    successCallback(value);
+    setItem(key, value, callback) {
+        this.ready().then(()=>{
+            return new Promise((resolve, reject) => {
+                const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).put(value, key);
+                request.onsuccess = (event) => {
+                    if (callback && typeof callback === 'function') {
+                        callback(false,value);
+                    }
+                    resolve(value);
+                };
+                request.onerror = (event) => {
+                    if (callback && typeof callback === 'function') {
+                        callback(true,null);
+                    }
+                    reject(event);
                 }
-                resolve(value);
-            };
-            request.onerror = (event) => {
-                reject(event);
-            }
+            })
         })
     }
 
-    getItem(key, successCallback) {
-        return new Promise((resolve, reject) => {
-            const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).get(key);
-            request.onsuccess = (event) => {
-                if (successCallback && typeof successCallback === 'function') {
-                    successCallback(request.result || null);
+    getItem(key, callback) {
+        this.ready().then(()=>{
+            return new Promise((resolve, reject) => {
+                const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).get(key);
+                request.onsuccess = (event) => {
+                    if (callback && typeof callback === 'function') {
+                        callback(false, request.result || null);
+                    }
+                    resolve(request.result || null);
+                };
+                request.onerror = (event) => {
+                    if (callback && typeof callback === 'function') {
+                        callback(true, null);
+                    }
+                    reject(event);
                 }
-                resolve(request.result || null);
-            };
-            request.onerror = (event) => {
-                reject(event);
-            }
+            })
         })
     }
 
-    removeItem(key, successCallback) {
-        return new Promise((resolve, reject) => {
-            const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).delete(key);
-            request.onsuccess = (event) => {
-                if (successCallback && typeof successCallback === 'function') {
-                    successCallback(equest.result || null);
-                }
-                resolve();
-            };
-            request.onerror = (event) => {
-                reject(event);
-            }
-        })
-    }
-
-    key(index, successCallback) {
-        return new Promise((resolve, reject) => {
-            const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).getAllKeys();
-            request.onsuccess = (event) => {
-                if (successCallback && typeof successCallback === 'function') {
-                    successCallback(request.result[index] || null);
-                }
-                resolve(request.result[index]);
-            };
-            request.onerror = (event) => {
-                reject(event);
-            }
-        })
-    }
-
-    keys(successCallback) {
-        return new Promise((resolve, reject) => {
-            const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).getAllKeys();
-            request.onsuccess = (event) => {
-                if (successCallback && typeof successCallback === 'function') {
-                    successCallback(request.result || []);
-                }
-                resolve(request.result || []);
-            };
-            request.onerror = (event) => {
-                reject(event);
-            }
-        })
-    }
-
-    clear(successCallback) {
-        return new Promise((resolve, reject) => {
-            const objectStore = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName);
-            const request = objectStore.getAllKeys();
-            request.onsuccess = (event) => {
-                const p = request.result.map(key => {
-                    return new Promise((resolve, reject) => {
-                        const request = objectStore.delete(key);
-                        request.onsuccess = (event) => {
-                            resolve();
-                        };
-                    })
-                })
-                Promise.all(p).then(() => {
-                    if (successCallback && typeof successCallback === 'function') {
-                        successCallback();
+    removeItem(key, callback) {
+        this.ready().then(()=>{
+            return new Promise((resolve, reject) => {
+                const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).delete(key);
+                request.onsuccess = (event) => {
+                    if (callback && typeof callback === 'function') {
+                        callback(false, equest.result || null);
                     }
                     resolve();
-                }).catch(event => {
+                };
+                request.onerror = (event) => {
+                    if (callback && typeof callback === 'function') {
+                        callback(true, null);
+                    }
                     reject(event);
-                });
-            };
+                }
+            })
+        })
+    }
 
+    key(index, callback) {
+        this.ready().then(()=>{
+            return new Promise((resolve, reject) => {
+                const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).getAllKeys();
+                request.onsuccess = (event) => {
+                    if (callback && typeof callback === 'function') {
+                        callback(false, request.result[index] || null);
+                    }
+                    resolve(request.result[index]);
+                };
+                request.onerror = (event) => {
+                    if (callback && typeof callback === 'function') {
+                        callback(true, null);
+                    }
+                    reject(event);
+                }
+            })
+        })
+    }
+
+    keys(callback) {
+        this.ready().then(()=>{
+            return new Promise((resolve, reject) => {
+                const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).getAllKeys();
+                request.onsuccess = (event) => {
+                    if (callback && typeof callback === 'function') {
+                        callback(false, request.result || []);
+                    }
+                    resolve(request.result || []);
+                };
+                request.onerror = (event) => {
+                    if (callback && typeof callback === 'function') {
+                        callback(true, null);
+                    }
+                    reject(event);
+                }
+            })
+        })
+    }
+
+    clear(callback) {
+        this.ready().then(()=>{
+            return new Promise((resolve, reject) => {
+                const objectStore = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName);
+                const request = objectStore.getAllKeys();
+                request.onsuccess = (event) => {
+                    const p = request.result.map(key => {
+                        return new Promise((resolve, reject) => {
+                            const request = objectStore.delete(key);
+                            request.onsuccess = (event) => {
+                                resolve();
+                            };
+                        })
+                    })
+                    Promise.all(p).then(() => {
+                        if (callback && typeof callback === 'function') {
+                            callback(false);
+                        }
+                        resolve();
+                    }).catch(event => {
+                        if (callback && typeof callback === 'function') {
+                            callback(true);
+                        }
+                        reject(event);
+                    });
+                };
+
+            })
         })
     }
 
 }
 
-new yuxDB().then((yuxStorage) => {
-    window.yuxStorage = yuxStorage;
-})
 
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-    module.exports = yuxDB;
+    module.exports = new yuxDB();
+} else {
+    window.yuxStorage = new yuxDB();
 }
 

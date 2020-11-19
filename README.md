@@ -44,7 +44,7 @@ npm i yux-storage
 通过 npm 安装，需要 import 导入
 
 ```js
-import 'yux-storage';
+import yuxStorage from 'yux-storage';
 ```
 
 在页面中使用
@@ -70,7 +70,7 @@ console.log(value)
 ### **GETITEM**
 
 ```js
-yuxStorage.getItem(key, successCallback)
+yuxStorage.getItem(key, callback)
 ```
 
 从仓库中获取 key 对应的值并将结果提供给回调函数。如果 `key` 不存在，`getItem()` 将返回 `null`。
@@ -100,7 +100,7 @@ yuxStorage.getItem('somekey', function(value) {
 ### **SETITEM**
 
 ```js
-yuxStorage.setItem(key, value, successCallback)
+yuxStorage.setItem(key, value, callback)
 ```
 
 将数据保存到离线仓库。你可以存储如下类型的 JavaScript 对象：
@@ -152,7 +152,7 @@ yuxStorage.setItem('file', file)
 ### **REMOVEITEM**
 
 ```js
-yuxStorage.removeItem(key, successCallback)
+yuxStorage.removeItem(key, callback)
 ```
 
 从离线仓库中删除 key 对应的值。
@@ -169,7 +169,7 @@ yuxStorage.removeItem('somekey').then(function() {
 ### **CLEAR**
 
 ```js
-yuxStorage.clear(successCallback)
+yuxStorage.clear(callback)
 ```
 
 从数据库中删除所有的 key，重置数据库。
@@ -188,7 +188,7 @@ yuxStorage.clear().then(function() {
 ### **KEY**
 
 ```js
-yuxStorage.key(keyIndex, successCallback)
+yuxStorage.key(keyIndex, callback)
 ```
 
 根据 key 的索引获取键的名称。
@@ -207,7 +207,7 @@ yuxStorage.key(2).then(function(keyName) {
 ### **KEYS**
 
 ```js
-yuxStorage.keys(successCallback)
+yuxStorage.keys(callback)
 ```
 
 获取数据仓库中所有的 key，返回一个数组。
