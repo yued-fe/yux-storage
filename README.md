@@ -51,17 +51,19 @@ import yuxStorage from 'yux-storage';
 
 ```js
 // 回调函数
-yuxStorage.getItem('key',doSomethingElse)
+yuxStorage.getItem('key',function(err,value){
+    if (err) {
+        console.log('出错了')
+    }
+})
 
 // 同样支持promise
-yuxStorage.getItem('key').then(doSomethingElse)
+yuxStorage.setItem('key').then(doSomethingElse)
 
 // 如果你的环境支持async，那么
 const value = await yuxStorage.getItem('key')
 console.log(value)
 ```
-
-> 如果出现报错，可查看下面的[注意事项](#注意事项)
 
 ## API
 
@@ -75,6 +77,7 @@ yuxStorage.getItem(key, callback)
 
 从仓库中获取 key 对应的值并将结果提供给回调函数。如果 `key` 不存在，`getItem()` 将返回 `null`。
 
+> 所有回调函数的第一个参数为**错误标识**，如果为 `true`，说明出错
 
 *示例*
 
@@ -90,7 +93,7 @@ const value = await yuxStorage.getItem('somekey');
 console.log(value);
 
 // 回调版本:
-yuxStorage.getItem('somekey', function(value) {
+yuxStorage.getItem('somekey', function(err,value) {
     // 当离线仓库中的值被载入时，此处代码运行
     console.log(value);
 });
@@ -141,6 +144,7 @@ yuxStorage.setItem('my array', [1, 2, 'three']).then(function(value) {
 yuxStorage.setItem([1,2,3], [1, 2, 'three'])
 
 // 还可以存储 file 文件
+
 const file = new File(["foo"], "foo.txt", {
     type: "text/plain",
 });
@@ -174,7 +178,7 @@ yuxStorage.clear(callback)
 
 从数据库中删除所有的 key，重置数据库。
 
-> 小心使用，本质就是遍历，然后执行 REMOVEITEM
+> 其实就是遍历，然后执行 REMOVEITEM
 
 *示例*
 
@@ -191,15 +195,13 @@ yuxStorage.clear().then(function() {
 yuxStorage.key(keyIndex, callback)
 ```
 
-根据 key 的索引获取键的名称。
+根据 key 的索引获取其名
 
 >  有些鸡肋的方法，很多时候我们不知道键的索引。
 
-*示例*
-
 ```js
 yuxStorage.key(2).then(function(keyName) {
-    // key名
+    // key 名
     console.log(keyName);
 })
 ```
@@ -210,64 +212,17 @@ yuxStorage.key(2).then(function(keyName) {
 yuxStorage.keys(callback)
 ```
 
-获取数据仓库中所有的 key，返回一个数组。
+获取数据仓库中所有的 key。
 
 >  localStorage API 并没有这个方法，但比上面的 key 要有用的多。
 
-*示例*
-
-```js
-yuxStorage.keys().then(function(keyNames) {
-    // 所有的key名
-    console.log(keyNames);
-})
-```
-
 ## 兼容性
 
-现代浏览器，不支持 `IE`
+不支持 `IE`
 
 > 兼容性取决于 [indexedDB](https://caniuse.com/?search=indexedDB) 和 [Promise](https://caniuse.com/?search=Promise)
 
-## 注意事项
-
-默认情况下，内部会暴露一个全局变量 yuxStorage，由于 indexedDB 的打开或者创建都是异步的，如果在页面加载后立即调用以上 API，可能会出现以下报错
-
-```js
-Uncaught ReferenceError: yuxStorage is not defined
-```
-
-这时，只需要将方法放在 `new yuxDB()` 的回调或者 Promise 后续流程就可以了
-
-```js
-new yuxDB().then(function(yuxStorage){
-    // 初始化完成
-    yuxStorage.getItem('somekey')
-})
-
-// async
-yuxStorage = await new yuxDB();
-// 初始化完成
-yuxStorage.getItem('somekey')
-
-
-// 回调方式
-new yuxDB(function(yuxStorage){
-    // 初始化完成
-    yuxStorage.getItem('somekey')
-})
-```
-
-如果是 import 导入，这需要将 yuxDB 导出
-
-```js
-import yuxDB from 'yux-storage'
-```
-
-> yuxDB 是整个库的构造函数，new yuxDB() 返回的是一个 Promise 对象， 初始完成后回调生成的 yuxStorage 才具备以上 API 的各种方法
 
 ## 联系我
 
 有相关问题或者意见可与我联系 yanwenbin@yuewen.com
-
-^ ^
