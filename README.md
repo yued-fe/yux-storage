@@ -54,6 +54,8 @@ import yuxStorage from 'yux-storage';
 yuxStorage.getItem('key',function(err,value){
     if (err) {
         console.log('出错了')
+    } else {
+        console.log(value)
     }
 })
 
@@ -95,7 +97,7 @@ console.log(value);
 // 回调版本:
 yuxStorage.getItem('somekey', function(err,value) {
     // 当离线仓库中的值被载入时，此处代码运行
-    console.log(value);
+    console.log(err, value);
 });
 
 ```
@@ -178,7 +180,7 @@ yuxStorage.clear(callback)
 
 从数据库中删除所有的 key，重置数据库。
 
-> 其实就是遍历，然后执行 REMOVEITEM
+> !小心使用，其实就是遍历，然后执行 REMOVEITEM
 
 *示例*
 
@@ -199,6 +201,8 @@ yuxStorage.key(keyIndex, callback)
 
 >  有些鸡肋的方法，很多时候我们不知道键的索引。
 
+*示例*
+
 ```js
 yuxStorage.key(2).then(function(keyName) {
     // key 名
@@ -216,9 +220,18 @@ yuxStorage.keys(callback)
 
 >  localStorage API 并没有这个方法，但比上面的 key 要有用的多。
 
+*示例*
+
+```js
+yuxStorage.keys().then(function(keyNames) {
+    // 所有的key名
+    console.log(keyNames);
+})
+```
+
 ## 兼容性
 
-不支持 `IE`
+现代浏览器，包括移动端，不支持 `IE`
 
 > 兼容性取决于 [indexedDB](https://caniuse.com/?search=indexedDB) 和 [Promise](https://caniuse.com/?search=Promise)
 
