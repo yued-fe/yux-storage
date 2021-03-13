@@ -54,6 +54,7 @@ import yuxStorage from 'yux-storage';
 yuxStorage.getItem('key',function(err,value){
     if (err) {
         console.log('出错了')
+        // 类似于 nodejs 回调格式
     } else {
         console.log(value)
     }
@@ -66,6 +67,10 @@ yuxStorage.setItem('key').then(doSomethingElse)
 const value = await yuxStorage.getItem('key')
 console.log(value)
 ```
+
+## 测试用例
+
+可访问 [yux-storage测试用例](https://yued-fe.github.io/yux-storage/)，记得打开控制台哦~
 
 ## API
 
@@ -238,4 +243,4 @@ yuxStorage.keys().then(function(keyNames) {
 
 ## 联系我
 
-有相关问题或者意见可与我联系 yanwenbin@yuewen.com
+有相关问题或者意见可与我联系 yanwenbin@yuewen.com、yanwenbin1991@live.com

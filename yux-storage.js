@@ -11,14 +11,14 @@ class yuxDB {
         this.ready()
     }
 
-    ready(){
+    ready() {
         return new Promise((resolve, reject) => {
-            if( this.db ){
+            if (this.db) {
                 resolve(this)
-            }else{
+            } else {
                 this.objectStoreName = 'yux-store';
                 const request = window.indexedDB.open('yux-project', 1);
-    
+
                 request.onsuccess = (event) => {
                     this.db = event.target.result;
                     resolve(this)
@@ -37,18 +37,18 @@ class yuxDB {
     }
 
     setItem(key, value, callback) {
-        this.ready().then(()=>{
+        return this.ready().then(() => {
             return new Promise((resolve, reject) => {
                 const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).put(value, key);
                 request.onsuccess = (event) => {
                     if (callback && typeof callback === 'function') {
-                        callback(false,value);
+                        callback(false, value);
                     }
                     resolve(value);
                 };
                 request.onerror = (event) => {
                     if (callback && typeof callback === 'function') {
-                        callback(true,null);
+                        callback(true, null);
                     }
                     reject(event);
                 }
@@ -57,7 +57,7 @@ class yuxDB {
     }
 
     getItem(key, callback) {
-        this.ready().then(()=>{
+        return this.ready().then(() => {
             return new Promise((resolve, reject) => {
                 const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).get(key);
                 request.onsuccess = (event) => {
@@ -77,7 +77,7 @@ class yuxDB {
     }
 
     removeItem(key, callback) {
-        this.ready().then(()=>{
+        return this.ready().then(() => {
             return new Promise((resolve, reject) => {
                 const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).delete(key);
                 request.onsuccess = (event) => {
@@ -97,14 +97,14 @@ class yuxDB {
     }
 
     key(index, callback) {
-        this.ready().then(()=>{
+        return this.ready().then(() => {
             return new Promise((resolve, reject) => {
                 const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).getAllKeys();
                 request.onsuccess = (event) => {
                     if (callback && typeof callback === 'function') {
                         callback(false, request.result[index] || null);
                     }
-                    resolve(request.result[index]);
+                    resolve(request.result[index] || null);
                 };
                 request.onerror = (event) => {
                     if (callback && typeof callback === 'function') {
@@ -117,7 +117,7 @@ class yuxDB {
     }
 
     keys(callback) {
-        this.ready().then(()=>{
+        return this.ready().then(() => {
             return new Promise((resolve, reject) => {
                 const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).getAllKeys();
                 request.onsuccess = (event) => {
@@ -137,7 +137,7 @@ class yuxDB {
     }
 
     clear(callback) {
-        this.ready().then(()=>{
+        return this.ready().then(() => {
             return new Promise((resolve, reject) => {
                 const objectStore = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName);
                 const request = objectStore.getAllKeys();
@@ -175,4 +175,3 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 } else {
     window.yuxStorage = new yuxDB();
 }
-

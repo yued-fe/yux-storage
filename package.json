@@ -1,28 +1,28 @@
 {
-  "name": "yux-storage",
-  "version": "1.1.1",
-  "description": "yux-storage 是一个基于 HTML5 IndexedDB 封装的 Web 本地数据离线存储库",
-  "main": "yux-storage.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yued-fe/yux-storage.git"
-  },
-  "keywords": [
-    "indexedDB",
-    "storage",
-    "localStorage",
-    "yux"
-  ],
-  "author": "XboxYan",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/yued-fe/yux-storage/issues"
-  },
-  "files": [
-    "yux-storage.js"
-  ],
-  "homepage": "https://github.com/yued-fe/yux-storage#readme"
+    "name": "yux-storage",
+    "version": "1.1.2",
+    "description": "yux-storage 是一个基于 HTML5 IndexedDB 封装的 Web 本地数据离线存储库",
+    "main": "yux-storage.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/yued-fe/yux-storage.git"
+    },
+    "keywords": [
+        "indexedDB",
+        "storage",
+        "localStorage",
+        "yux"
+    ],
+    "author": "XboxYan",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/yued-fe/yux-storage/issues"
+    },
+    "files": [
+        "yux-storage.js"
+    ],
+    "homepage": "https://github.com/yued-fe/yux-storage#readme"
 }
