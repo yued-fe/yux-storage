@@ -2,24 +2,23 @@
 
 yux-storage 是一个基于 HTML5 [IndexedDB](https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API) 封装的 Web 本地数据离线存储库。
 
-
 ## 特点
 
 1. 使用类似 [localStorage API](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/localStorage)， 无需考虑 IndexedDB 的复杂概念，上手无压力。
 1. 支持回调和 [Promise](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise) 两种方式，各凭所愿。
-1. 非常轻量，100 行左右的源码，压缩后更小。
+1. 无任何依赖，非常轻量，不到 200 行左右的源码，压缩后更小。
 
 以下是继承 IndexedDB 的特点
 
-1. 可以存储多种类型的数据，而不仅仅是字符串。
-3. 储存空间大，一般来说不少于 250MB，甚至没有上限。
-2. 异步操作，在进行大量数据存取时不会阻塞应用程序。
+1. 可以存储多种类型的数据，而不仅仅是字符串，无需序列化处理。
+1. 储存空间大，一般来说不少于 250MB，甚至没有上限。
+1. 异步操作，在进行大量数据存取时不会阻塞应用程序。
 
 ## 快速开始
 
 ### 安装
 
-1. 直接在 [github](https://github.com/yued-fe/yux-storage) 获取 yux-storage.js
+1. 直接在 [github](https://github.com/yued-fe/yux-storage) 获取 yux-storage.js （推荐）
 
 ```html
 <script src="yux-storage.js"></script>
@@ -72,6 +71,49 @@ console.log(value)
 
 可访问 [yux-storage测试用例](https://yued-fe.github.io/yux-storage/)，记得打开控制台哦~
 
+## 错误处理
+
+一般情况下报错都是参数不合法导致，例如设置添加一个键为`Object`的操作
+
+```js
+DOMException: Failed to execute 'get' on 'IDBObjectStore': The parameter is not a valid key.
+```
+
+> 以下 err 为错误信息
+
+1. 回调函数直接通过第一个参数判断
+
+```js
+// 回调函数
+yuxStorage.getItem('key',function(err,value){
+    if (err) {
+        console.log('出错了',err)
+    } else {
+        console.log(value)
+    }
+})
+```
+
+2. promsie 可以通过catch来捕获
+
+```js
+yuxStorage.getItem('key').then(function(key) {
+    console.log(key);
+}).catch(err => {
+    console.log('出错了',err)
+})
+```
+
+3. async/await 可以通过 try...catch 来捕获
+
+```js
+try {
+    const  key = await yuxStorage.getItem('key');
+} catch (error) {
+    console.log('出错了',err)
+}
+```
+
 ## API
 
 获取或设置离线仓库中的数据的 API。风格参考 [localStorage API](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/localStorage)
@@ -82,9 +124,9 @@ console.log(value)
 yuxStorage.getItem(key, callback)
 ```
 
-从仓库中获取 key 对应的值并将结果提供给回调函数。如果 `key` 不存在，`getItem()` 将返回 `null`。
+从仓库中获取 key 对应的值并将结果提供给回调函数。如果 `key` 不存在，`getItem()` 将返回 `undefined`。
 
-> 所有回调函数的第一个参数为**错误标识**，如果为 `true`，说明出错
+> 所有回调函数的第一个参数为**错误信息**，如果为 `false`，说明设置正常
 
 *示例*
 
@@ -131,7 +173,7 @@ yuxStorage.setItem(key, value, callback)
 * Uint32Array
 * String
 
-> 可能不太完整，理论上支持任意格式的数据
+> 可能不太完整，理论上支持任意格式的数据，不能是 function
 
 *示例*
 
@@ -141,13 +183,13 @@ yuxStorage.setItem('somekey', 'some value').then(function (value) {
     console.log(value);
 })
 
-// 不同于 localStorage，你可以存储非字符串类型
+// 不同于 localStorage，你可以存储非字符串类型（强烈推荐，无需序列化处理）
 yuxStorage.setItem('my array', [1, 2, 'three']).then(function(value) {
     // 如下输出 `1`
     console.log(value[0]);
 })
 
-// 键名也可以是非字符串，比如一个数组
+// 键名也可以是数组或者数字（不推荐，一般用字符串就足够了）
 yuxStorage.setItem([1,2,3], [1, 2, 'three'])
 
 // 还可以存储 file 文件
@@ -158,6 +200,8 @@ const file = new File(["foo"], "foo.txt", {
 
 yuxStorage.setItem('file', file)
 
+// 报错，不能是function
+yuxStorage.setItem('file', function(){})
 ```
 
 ### **REMOVEITEM**
@@ -202,7 +246,7 @@ yuxStorage.clear().then(function() {
 yuxStorage.key(keyIndex, callback)
 ```
 
-根据 key 的索引获取其名
+根据 key 的索引获取其名，如果不存在返回 `undefined`
 
 >  有些鸡肋的方法，很多时候我们不知道键的索引。
 
@@ -221,7 +265,7 @@ yuxStorage.key(2).then(function(keyName) {
 yuxStorage.keys(callback)
 ```
 
-获取数据仓库中所有的 key。
+获取数据仓库中所有的 key，如果不存在返回空数组`[]`。
 
 >  localStorage API 并没有这个方法，但比上面的 key 要有用的多。
 
@@ -243,4 +287,4 @@ yuxStorage.keys().then(function(keyNames) {
 
 ## 联系我
 
-有相关问题或者意见可与我联系 yanwenbin@yuewen.com、yanwenbin1991@live.com
+有相关问题或者意见可与我联系 yanwenbin@yuewen.com

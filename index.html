@@ -23,7 +23,7 @@
             margin: 0;
         }
         
-        button {
+        button,input {
             margin: 5px;
         }
         
@@ -38,8 +38,9 @@
     <h1>yux-storage</h1>
     <blockquote>请打开控制台查看</blockquote>
     <h2>getItem</h2>
-    <pre>const result = await yuxStorage.getItem('A');
-console.log(result)</pre>
+    <pre>yuxStorage.getItem('A').then(res => {
+    console.log(result)
+});</pre>
     <button onclick="get('A')">获取key：A</button>
     <button onclick="get('B')">获取key：B</button>
     <button onclick="get(['A','B'])">获取key：['A','B']</button>
@@ -47,74 +48,97 @@ console.log(result)</pre>
     <pre>yuxStorage.setItem(key, value)</pre>
     <button onclick="set('A', 1)">设置 A = 1</button>
     <button onclick="set('B', 2)">设置 B = 2</button>
-    <p>测试键为数组</p>
+    <p>测试键为数组或者数字</p>
     <button onclick="set(['A','B'], 3)">设置 ['A','B'] = 3</button>
-    <button onclick="set([1,2], 4)">设置 [1,2] = 4</button>
+    <button onclick="set(1, 4)">设置 1 = 4</button>
     <p>测试值为非字符串</p>
-    <button onclick="set('C', [1,2])">设置 'C' = [1,2]</button>
-    <button onclick="set('C', {name: 'xboxyan'})">设置 'C' = {name: 'xboxyan'}</button>
-    <button onclick="set('C', Date())">设置 'C' = Date()</button>
-    <button onclick="set('C', new Blob())">设置 'C' = new Blob()</button>
-    <button onclick="set('C', new ArrayBuffer())">设置 'C' = new ArrayBuffer()</button>
-    <button onclick="set('C', new RegExp())">设置 'C' = new RegExp()</button>
-    <button onclick="set('C', new Int16Array())">设置 'C' = new Int16Array()</button>
-    <button onclick="set('C', file)">设置 'C' = new File()</button>
-    <br>
+    <button onclick="set('C', [1,2])">设置 C = [1,2]</button>
+    <button onclick="set('C', {name: 'xboxyan'})">设置 C = {name: 'xboxyan'}</button>
+    <button onclick="set('C', Date())">设置 C = Date()</button>
+    <button onclick="set('C', new Blob())">设置 C = new Blob()</button>
+    <button onclick="set('C', new ArrayBuffer())">设置 C = new ArrayBuffer()</button>
+    <button onclick="set('C', new RegExp())">设置 C = new RegExp()</button>
+    <button onclick="set('C', new Float32Array())">设置 C = new Float32Array()</button>
+    <button onclick="set('C', new Int16Array())">设置 C = new Int16Array()</button>
+    <button onclick="set('C', new Uint16Array())">设置 C = new Uint16Array()</button>
+    <p>测试值为随意上传的文件，不限大小</p>
+    <input type="file" onchange="set('C', event.target.files[0])" />
+    <p>获取上面的值</p>
     <button onclick="get('C')">获取key：C</button>
     <h2>removeItem</h2>
     <pre>yuxStorage.removeItem(key)</pre>
     <button onclick="remove('A')">删除 A</button>
     <button onclick="remove('B')">删除 B</button>
     <h2>key</h2>
-    <pre>yuxStorage.key(keyIndex, callback)</pre>
+    <pre>yuxStorage.key(keyIndex)</pre>
     <button onclick="key(0)">第1个键</button>
     <button onclick="key(1)">第2个键</button>
     <button onclick="key(2)">第3个键</button>
     <button onclick="key(3)">第4个键</button>
     <button onclick="key(4)">第5个键</button>
     <h2>keys</h2>
-    <pre>const names = await = yuxStorage.keys();
-console.log(result)</pre>
+    <pre>yuxStorage.keys().then(names => {
+    console.log(result)
+};</pre>
     <button onclick="keys()">所有键</button>
     <h2>clear</h2>
     <pre>yuxStorage.clear()</pre>
     <button onclick="clearStorage()">!清空全部数据</button>
+    <h2>错误捕获</h2>
+    <pre>// 回调函数
+yuxStorage.getItem({},function(err,value){
+    if(err){
+        console.log(err)
+    }else{
+        console.log(value)
+    }
+});
+
+// promise
+yuxStorage.getItem(key).then(value => {
+    console.log(value)
+}).catch(err => console.log(err))</pre>
+    <p>参数不合法时会报错</p>
+    <button onclick="get({})">获取key：{}</button>
+    <button onclick="set('M', function(){})">设置 M = function(){}</button>
     <script src="./yux-storage.js"></script>
     <script>
-        async function get(key) {
-            const result = await yuxStorage.getItem(key);
-            console.log(key, '=>', result)
+        function get(key) {
+            yuxStorage.getItem(key).then(res => {
+                console.log(key, '=>', res)
+            }).catch(err => console.log(err))
         }
 
-        async function set(key, value) {
-            const result = await yuxStorage.setItem(key, value);
-            console.log(key, '设置完成')
+        function set(key, value) {
+            yuxStorage.setItem(key, value).then(res => {
+                console.log(key, '设置完成')
+            }).catch(err => console.log(err))
         }
 
-        async function remove(key) {
-            await yuxStorage.removeItem(key);
-            console.log(key, '已被移除')
+        function remove(key) {
+            yuxStorage.removeItem(key).then(res => {
+                console.log(key, '已被移除')
+            }).catch(err => console.log(err))
         }
 
-        async function clearStorage() {
-            await yuxStorage.clear();
-            console.log('数据已清空')
+        function clearStorage() {
+            yuxStorage.clear().then(res => {
+                console.log('数据已清空')
+            }).catch(err => console.log(err))
         }
 
-        async function key(index) {
-            const name = await yuxStorage.key(index);
-            console.log(index, '=>', name)
+        function key(index) {
+            yuxStorage.key(index).then(res => {
+                console.log(index, '=>', res)
+            })
         }
 
-        async function keys() {
-            const names = await yuxStorage.keys();
-            console.log('全部键', names)
+        function keys() {
+            yuxStorage.keys().then(res => {
+                console.log('全部键', res)
+            }).catch(err => console.log(err))
         }
 
-
-        var file = new File(["foo"], "foo.txt", {
-            type: "text/plain",
-        });
     </script>
 </body>
 
