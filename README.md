@@ -69,7 +69,7 @@ console.log(value)
 
 ## 测试用例
 
-可访问 [yux-storage测试用例](https://jsbin.com/bigamer/edit?console,output)，建议打开控制台哦~
+可访问 [yux-storage测试用例](https://jsbin.com/bigamer/edit?console,output)，建议打开控制台哦（记得打开右上角Auto-run JS）~
 
 另外可访问[这里](https://yued-fe.github.io/yux-storage/)，需要打开控制台查看
 
