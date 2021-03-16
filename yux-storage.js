@@ -9,20 +9,19 @@
 class yuxDB {
 
     constructor() {
-        this.ready()
+        this.ready();
     }
 
     ready() {
         return new Promise((resolve, reject) => {
             if (this.db) {
-                resolve(this)
+                resolve(this);
             } else {
                 this.objectStoreName = 'yux-store';
                 const request = window.indexedDB.open('yux-project', 1);
-
                 request.onsuccess = (event) => {
                     this.db = event.target.result;
-                    resolve(this)
+                    resolve(this);
                 };
                 request.onupgradeneeded = (event) => {
                     const db = event.target.result;
@@ -37,140 +36,72 @@ class yuxDB {
         })
     }
 
-    setItem(key, value, callback) {
+    init(request, callback) {
         return new Promise((resolve, reject) => {
-            const fail = event => {
+            const success = value => {
+                if (callback && typeof callback === 'function') {
+                    callback(false, value);
+                }
+                resolve(value);
+            }
+            const error = event => {
                 if (callback && typeof callback === 'function') {
                     callback(event);
                 }
                 reject(event);
             }
             return this.ready().then(() => {
-                const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).put(value, key);
-                request.onsuccess = (event) => {
-                    if (callback && typeof callback === 'function') {
-                        callback(false, value);
-                    }
-                    resolve(value);
-                };
-                request.onerror = fail;
-            }).catch(fail)
+                request(success, error);
+            }).catch(error)
         })
+    }
+
+    setItem(key, value, callback) {
+        return this.init((success, error)=>{
+            const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).put(value, key);
+            request.onsuccess = () => success(value);
+            request.onerror = error;
+        }, callback)
     }
 
     getItem(key, callback) {
-        return new Promise((resolve, reject) => {
-            const fail = event => {
-                if (callback && typeof callback === 'function') {
-                    callback(event);
-                }
-                reject(event);
-            }
-            return this.ready().then(() => {
-                const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).get(key);
-                request.onsuccess = (event) => {
-                    if (callback && typeof callback === 'function') {
-                        callback(false, request.result);
-                    }
-                    resolve(request.result);
-                };
-                request.onerror = fail;
-            }).catch(fail)
-        })
+        return this.init((success, error)=>{
+            const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).get(key);
+            request.onsuccess = () => success(request.result);
+            request.onerror = error;
+        }, callback)
     }
 
     removeItem(key, callback) {
-        return new Promise((resolve, reject) => {
-            const fail = event => {
-                if (callback && typeof callback === 'function') {
-                    callback(event);
-                }
-                reject(event);
-            }
-            return this.ready().then(() => {
-                const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).delete(key);
-                request.onsuccess = (event) => {
-                    if (callback && typeof callback === 'function') {
-                        callback(false, request.result);
-                    }
-                    resolve();
-                };
-                request.onerror = fail;
-            }).catch(fail)
-        })
+        return this.init((success, error)=>{
+            const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).delete(key);
+            request.onsuccess = () => success(key);
+            request.onerror = error;
+        }, callback)
     }
 
     key(index, callback) {
-        return new Promise((resolve, reject) => {
-            const fail = event => {
-                if (callback && typeof callback === 'function') {
-                    callback(event);
-                }
-                reject(event);
-            }
-            return this.ready().then(() => {
-                const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).getAllKeys();
-                request.onsuccess = (event) => {
-                    if (callback && typeof callback === 'function') {
-                        callback(false, request.result[index]);
-                    }
-                    resolve(request.result[index]);
-                };
-                request.onerror = fail;
-            }).catch(fail)
-        })
+        return this.init((success, error)=>{
+            const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).getAllKeys();
+            request.onsuccess = () => success(request.result[index]);
+            request.onerror = error;
+        }, callback)
     }
 
     keys(callback) {
-        return new Promise((resolve, reject) => {
-            const fail = event => {
-                if (callback && typeof callback === 'function') {
-                    callback(event);
-                }
-                reject(event);
-            }
-            return this.ready().then(() => {
-                const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).getAllKeys();
-                request.onsuccess = (event) => {
-                    if (callback && typeof callback === 'function') {
-                        callback(false, request.result || []);
-                    }
-                    resolve(request.result || []);
-                };
-                request.onerror = fail;
-            }).catch(fail)
-        })
+        return this.init((success, error)=>{
+            const request = this.db.transaction(this.objectStoreName).objectStore(this.objectStoreName).getAllKeys();
+            request.onsuccess = () => success(request.result);
+            request.onerror = error;
+        }, callback)
     }
 
     clear(callback) {
-        return new Promise((resolve, reject) => {
-            const fail = event => {
-                if (callback && typeof callback === 'function') {
-                    callback(event);
-                }
-                reject(event);
-            }
-            return this.ready().then(() => {
-                const objectStore = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName);
-                const request = objectStore.getAllKeys();
-                request.onsuccess = (event) => {
-                    const p = request.result.map(key => {
-                        return new Promise((resolve, reject) => {
-                            const request = objectStore.delete(key);
-                            request.onsuccess = (event) => {
-                                resolve();
-                            };
-                        })
-                    })
-                    Promise.all(p).then(() => {
-                        if (callback && typeof callback === 'function') {
-                            callback(false);
-                        }
-                        resolve();
-                    }).catch(fail);
-                };
-            }).catch(fail)
-        })
+        return this.init((success, error)=>{
+            const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).clear();
+            request.onsuccess = () => success(null);
+            request.onerror = error;
+        }, callback)
     }
 }
 

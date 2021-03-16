@@ -6,7 +6,7 @@ yux-storage 是一个基于 HTML5 [IndexedDB](https://developer.mozilla.org/zh-C
 
 1. 使用类似 [localStorage API](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/localStorage)， 无需考虑 IndexedDB 的复杂概念，上手无压力。
 1. 支持回调和 [Promise](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise) 两种方式，各凭所愿。
-1. 无任何依赖，非常轻量，不到 200 行左右的源码，压缩后更小。
+1. 无任何依赖，非常轻量，100 行左右的源码，压缩后更小。
 
 以下是继承 IndexedDB 的特点
 
@@ -229,7 +229,7 @@ yuxStorage.clear(callback)
 
 从数据库中删除所有的 key，重置数据库。
 
-> !小心使用，其实就是遍历，然后执行 REMOVEITEM
+> !小心使用，会删除所有数据
 
 *示例*
 
