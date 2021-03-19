@@ -6,84 +6,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>yux-storage测试用例</title>
     <style>
-        body {
-            padding: 0 0.5em;
-        }
-        
-        pre {
-            font-family: 'Courier New', Courier;
-            background-color: antiquewhite;
-            padding: 0.5em 1em;
-        }
-        
-        blockquote {
-            border-left: solid royalblue;
-            padding: 0.5em 1em;
-            background-color: beige;
-            margin: 0;
-        }
-        
-        button,input {
-            margin: 5px;
-        }
-        
-        p {
-            font-size: 12px;
-        }
+    body {
+        padding: 0 0.5em 100px;
+        background: #fff;
+    }
+
+    pre {
+        padding: 12px 1em;
+        margin: 1em 0;
+        background-color: #f5f7f9;
+        font-family: Consolas, monospace;
+        font-size: 100%;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        border-radius: 4px;
+        box-shadow: inset 1px 0 #e3e5e8, inset 0 1px #e3e5e8, inset -1px 0 #eaf0f5, inset 0 -1px #eaf0f5;
+        tab-size: 2;
+    }
+
+    blockquote {
+        font-family: 'kaiti', 'STKaiti';
+        border-left: solid silver;
+        background-color: #ffffe0;
+        padding: 0.5em 1em;
+        background-color: beige;
+        margin: 0;
+    }
+
+    button,input {
+        margin: 5px;
+    }
+
+    p {
+        font-size: 12px;
+    }
+    input[type="file" i]{
+        outline: 0;
+    }
+    input[type="file" i]::-webkit-file-upload-button{
+        display: none;
+    }
     </style>
+    <link rel="stylesheet" href="https://qidian.gtimg.com/lulu/pure/css/common/ui/LightTip.css">
+    <link rel="stylesheet" href="https://qidian.gtimg.com/lulu/pure/css/common/ui/Button.css">  
+    <script src="https://qidian.gtimg.com/lulu/pure/js/common/ui/LightTip.js"></script>
 </head>
 
 <body>
-
     <h1>yux-storage</h1>
-    <blockquote>请打开控制台查看</blockquote>
+    <blockquote>推荐打开控制台查看</blockquote>
     <h2>getItem</h2>
     <pre>yuxStorage.getItem('A').then(res => {
     console.log(result)
 });</pre>
-    <button onclick="get('A')">获取key：A</button>
-    <button onclick="get('B')">获取key：B</button>
-    <button onclick="get(['A','B'])">获取key：['A','B']</button>
+    <button class="ui-button" data-type="success" onclick="gets('A')">获取key：A</button>
+    <button class="ui-button" data-type="success" onclick="gets('B')">获取key：B</button>
+    <button class="ui-button" data-type="success" onclick="gets(['A','B'])">获取key：['A','B']</button>
     <h2>setItem</h2>
     <pre>yuxStorage.setItem(key, value)</pre>
-    <button onclick="set('A', 1)">设置 A = 1</button>
-    <button onclick="set('B', 2)">设置 B = 2</button>
+    <button class="ui-button" data-type="primary" onclick="sets('A', 1)">设置 A = 1</button>
+    <button class="ui-button" data-type="primary" onclick="sets('B', 2)">设置 B = 2</button>
     <p>测试键为数组或者数字</p>
-    <button onclick="set(['A','B'], 3)">设置 ['A','B'] = 3</button>
-    <button onclick="set(1, 4)">设置 1 = 4</button>
+    <button class="ui-button" data-type="primary" onclick="sets(['A','B'], 3)">设置 ['A','B'] = 3</button>
+    <button class="ui-button" data-type="primary" onclick="sets(1, 4)">设置 1 = 4</button>
     <p>测试值为非字符串</p>
-    <button onclick="set('C', [1,2])">设置 C = [1,2]</button>
-    <button onclick="set('C', {name: 'xboxyan'})">设置 C = {name: 'xboxyan'}</button>
-    <button onclick="set('C', Date())">设置 C = Date()</button>
-    <button onclick="set('C', new Blob())">设置 C = new Blob()</button>
-    <button onclick="set('C', new ArrayBuffer())">设置 C = new ArrayBuffer()</button>
-    <button onclick="set('C', new RegExp())">设置 C = new RegExp()</button>
-    <button onclick="set('C', new Float32Array())">设置 C = new Float32Array()</button>
-    <button onclick="set('C', new Int16Array())">设置 C = new Int16Array()</button>
-    <button onclick="set('C', new Uint16Array())">设置 C = new Uint16Array()</button>
+    <button class="ui-button" data-type="primary" onclick="sets('C', [1,2])">设置 C = [1,2]</button>
+    <button class="ui-button" data-type="primary" onclick="sets('C', {name: 'xboxyan'})">设置 C = {name: 'xboxyan'}</button>
+    <button class="ui-button" data-type="primary" onclick="sets('C', Date())">设置 C = Date()</button>
+    <button class="ui-button" data-type="primary" onclick="sets('C', new Blob())">设置 C = new Blob()</button>
+    <button class="ui-button" data-type="primary" onclick="sets('C', new ArrayBuffer())">设置 C = new ArrayBuffer()</button>
+    <button class="ui-button" data-type="primary" onclick="sets('C', new RegExp())">设置 C = new RegExp()</button>
+    <button class="ui-button" data-type="primary" onclick="sets('C', new Float32Array())">设置 C = new Float32Array()</button>
+    <button class="ui-button" data-type="primary" onclick="sets('C', new Int16Array())">设置 C = new Int16Array()</button>
+    <button class="ui-button" data-type="primary" onclick="sets('C', new Uint16Array())">设置 C = new Uint16Array()</button>
     <p>测试值为随意上传的文件，不限大小</p>
-    <input type="file" onchange="set('C', event.target.files[0])" />
+    <label class="ui-button" data-type="primary" id="label" for="file">选择文件</label>
+    <input id="file" type="file" onchange="sets('C', event.target.files[0])" />
     <p>获取上面的值</p>
-    <button onclick="get('C')">获取key：C</button>
+    <button class="ui-button" data-type="success" onclick="gets('C')">获取key：C</button>
     <h2>removeItem</h2>
     <pre>yuxStorage.removeItem(key)</pre>
-    <button onclick="remove('A')">删除 A</button>
-    <button onclick="remove('B')">删除 B</button>
+    <button class="ui-button" data-type="warning" onclick="removes('A')">删除 A</button>
+    <button class="ui-button" data-type="warning" onclick="removes('B')">删除 B</button>
     <h2>key</h2>
     <pre>yuxStorage.key(keyIndex)</pre>
-    <button onclick="key(0)">第1个键</button>
-    <button onclick="key(1)">第2个键</button>
-    <button onclick="key(2)">第3个键</button>
-    <button onclick="key(3)">第4个键</button>
-    <button onclick="key(4)">第5个键</button>
+    <button class="ui-button" data-type="success" onclick="key(0)">第1个键</button>
+    <button class="ui-button" data-type="success" onclick="key(1)">第2个键</button>
+    <button class="ui-button" data-type="success" onclick="key(2)">第3个键</button>
+    <button class="ui-button" data-type="success" onclick="key(3)">第4个键</button>
+    <button class="ui-button" data-type="success" onclick="key(4)">第5个键</button>
     <h2>keys</h2>
     <pre>yuxStorage.keys().then(names => {
     console.log(result)
 };</pre>
-    <button onclick="keys()">所有键</button>
+    <button class="ui-button" data-type="success" onclick="keys()">所有键</button>
     <h2>clear</h2>
     <pre>yuxStorage.clear()</pre>
-    <button onclick="clearStorage()">!清空全部数据</button>
+    <button class="ui-button" data-type="danger" onclick="clearStorage()">!清空全部数据</button>
     <h2>错误捕获</h2>
     <pre>// 回调函数
 yuxStorage.getItem({},function(err,value){
@@ -99,43 +118,61 @@ yuxStorage.getItem(key).then(value => {
     console.log(value)
 }).catch(err => console.log(err))</pre>
     <p>参数不合法时会报错</p>
-    <button onclick="get({})">获取key：{}</button>
-    <button onclick="set('M', function(){})">设置 M = function(){}</button>
+    <button class="ui-button" data-type="success" onclick="gets({})">获取key：{}</button>
+    <button class="ui-button" data-type="primary" onclick="sets('M', function(){})">设置 M = function(){}</button>
     <script src="./yux-storage.js"></script>
     <script>
-        function get(key) {
+        function gets(key) {
             yuxStorage.getItem(key).then(res => {
                 console.log(key, '=>', res)
-            }).catch(err => console.log(err))
+                new LightTip().success(JSON.stringify(key)+': '+Object.prototype.toString.call(res)+ ' '+JSON.stringify(res));
+            }).catch(err => {
+                console.log(err)
+                new LightTip().error(JSON.stringify(err));
+            })
         }
 
-        function set(key, value) {
+        function sets(key, value) {
             yuxStorage.setItem(key, value).then(res => {
                 console.log(key, '设置完成')
-            }).catch(err => console.log(err))
+                new LightTip().success('设置完成');
+            }).catch(err => {
+                console.log(err)
+                new LightTip().error(JSON.stringify(err));
+            })
         }
 
-        function remove(key) {
+        function removes(key) {
             yuxStorage.removeItem(key).then(res => {
                 console.log(key, '已被移除')
-            }).catch(err => console.log(err))
+                new LightTip().success(JSON.stringify(key)+'已被移除');
+            }).catch(err => {
+                console.log(err)
+                new LightTip().error(JSON.stringify(err));
+            })
         }
 
         function clearStorage() {
             yuxStorage.clear().then(res => {
                 console.log('数据已清空')
-            }).catch(err => console.log(err))
+                new LightTip().success('数据已清空');
+            }).catch(err => {
+                console.log(err)
+                new LightTip().error(JSON.stringify(err));
+            })
         }
 
         function key(index) {
             yuxStorage.key(index).then(res => {
                 console.log(index, '=>', res)
+                new LightTip().success(`第${index}个键: `+JSON.stringify(res));
             })
         }
 
         function keys() {
             yuxStorage.keys().then(res => {
                 console.log('全部键', res)
+                new LightTip().success('全部键: '+JSON.stringify(res));
             }).catch(err => console.log(err))
         }
 
