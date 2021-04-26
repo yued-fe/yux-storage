@@ -14,6 +14,10 @@ yux-storage 是一个基于 HTML5 [IndexedDB](https://developer.mozilla.org/zh-C
 1. 储存空间大，一般来说不少于 250MB，甚至没有上限。
 1. 异步操作，在进行大量数据存取时不会阻塞应用程序。
 
+## 适用场景
+
+适用于复杂对象、经常需要序列化处理的数据操作，否则使用 localStorage 更加方便
+
 ## 快速开始
 
 ### 安装
@@ -289,4 +293,4 @@ yuxStorage.keys().then(function(keyNames) {
 
 ## 联系我
 
-有相关问题或者意见可与我联系 yanwenbin@yuewen.com
+有相关问题或者意见可与我联系 yanwenbin1991@live.com
