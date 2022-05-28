@@ -69,6 +69,12 @@ yuxStorage.setItem('key').then(doSomethingElse)
 // 如果你的环境支持async，那么
 const value = await yuxStorage.getItem('key')
 console.log(value)
+
+// 如果你想监听数据的更新，那么
+yuxStorage.addEventListener((type, data) => {
+    console.log(type, data)
+    // ‘setItem’, '{key, value}'
+})
 ```
 
 ## 测试用例
@@ -283,6 +289,19 @@ yuxStorage.keys().then(function(keyNames) {
     console.log(keyNames);
 })
 ```
+
+## 监听器
+
+如果想监听数据的更新，可以使用`addEventListener`方法，`setItem`、`removeItem`、`clear` 都会触发回调
+
+```js
+yuxStorage.addEventListener((type, data) => {
+    console.log(type, data)
+    // ‘setItem’, '{key, value}'
+})
+```
+
+> 支持多次调用
 
 ## 兼容性
 

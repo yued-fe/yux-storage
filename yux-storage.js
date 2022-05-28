@@ -8,17 +8,17 @@
 
 class yuxDB {
 
-    constructor() {
-        this.ready();
+    constructor(projectName) {
+        this.ready(projectName);
     }
 
-    ready() {
+    ready(projectName='yux-project') {
         return new Promise((resolve, reject) => {
             if (this.db) {
                 resolve(this);
             } else {
                 this.objectStoreName = 'yux-store';
-                const request = window.indexedDB.open('yux-project', 1);
+                const request = window.indexedDB.open(projectName, 1);
                 request.onsuccess = (event) => {
                     this.db = event.target.result;
                     resolve(this);
@@ -56,11 +56,29 @@ class yuxDB {
         })
     }
 
+    eventList = []
+
+    // 触发事件
+    triggerEvent() {
+        this.eventList.forEach(fn => {
+            fn(...arguments)
+        })
+    }
+
+    // 自定义事件
+    addEventListener(callback) {
+        this.eventList.push(callback);
+    }
+
     setItem(key, value, callback) {
         return this.init((success, error)=>{
             const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).put(value, key);
-            request.onsuccess = () => success(value);
+            request.onsuccess = () => {
+                success(value);
+                this.triggerEvent('setItem',{key,value});
+            };
             request.onerror = error;
+            // this.dispatchEvent(new CustomEvent('update'))
         }, callback)
     }
 
@@ -75,7 +93,10 @@ class yuxDB {
     removeItem(key, callback) {
         return this.init((success, error)=>{
             const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).delete(key);
-            request.onsuccess = () => success(key);
+            request.onsuccess = () => {
+                success(key);
+                this.triggerEvent('removeItem',{key});
+            };
             request.onerror = error;
         }, callback)
     }
@@ -99,7 +120,10 @@ class yuxDB {
     clear(callback) {
         return this.init((success, error)=>{
             const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).clear();
-            request.onsuccess = () => success(null);
+            request.onsuccess = () => {
+                success(null);
+                this.triggerEvent('clear',{key});
+            };;
             request.onerror = error;
         }, callback)
     }

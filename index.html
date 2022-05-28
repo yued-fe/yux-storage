@@ -82,6 +82,8 @@
     <p>测试值为随意上传的文件，不限大小</p>
     <label class="ui-button" data-type="primary" id="label" for="file">选择文件</label>
     <input id="file" type="file" onchange="sets('C', event.target.files[0])" />
+    <p>监听上面的值</p>
+    <pre id="pre_c"></pre>
     <p>获取上面的值</p>
     <button class="ui-button" data-type="success" onclick="gets('C')">获取key：C</button>
     <h2>removeItem</h2>
@@ -175,6 +177,11 @@ yuxStorage.getItem(key).then(value => {
                 new LightTip().success('全部键: '+JSON.stringify(res));
             }).catch(err => console.log(err))
         }
+
+        yuxStorage.addEventListener((type, data) => {
+            console.log(type, data)
+            pre_c.innerHTML = JSON.stringify(data)
+        })
 
     </script>
 </body>
