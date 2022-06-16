@@ -60,6 +60,9 @@ class yuxDB {
 
     // 触发事件
     triggerEvent() {
+        document.dispatchEvent(new CustomEvent('yuxStorage', {
+            detail: [...arguments]
+        }))
         this.eventList.forEach(fn => {
             fn(...arguments)
         })

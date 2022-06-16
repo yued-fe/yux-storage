@@ -183,6 +183,11 @@ yuxStorage.getItem(key).then(value => {
             pre_c.innerHTML = JSON.stringify(data)
         })
 
+        document.addEventListener('yuxStorage', ev => {
+            const [type, detail] = ev.detail;
+            console.log(type, detail)
+        })
+
     </script>
 </body>
 

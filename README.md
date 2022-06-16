@@ -301,6 +301,17 @@ yuxStorage.addEventListener((type, data) => {
 })
 ```
 
+同时也支持全局调用，可以通过监听 `document` 自定义事件
+
+```js
+document.addEventListener('yuxStorage', ev => {
+    // 自定义事件的数据在 ev.detail
+    const [type, detail] = ev.detail;
+    console.log(type, detail)
+    // ‘setItem’, '{key, value}'
+})
+```
+
 > 支持多次调用
 
 ## 兼容性
