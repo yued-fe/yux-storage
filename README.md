@@ -306,8 +306,8 @@ yuxStorage.addEventListener((type, data) => {
 ```js
 document.addEventListener('yuxStorage', ev => {
     // 自定义事件的数据在 ev.detail
-    const [type, detail] = ev.detail;
-    console.log(type, detail)
+    const [type, data] = ev.detail;
+    console.log(type, data)
     // ‘setItem’, '{key, value}'
 })
 ```
