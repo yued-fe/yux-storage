@@ -120,8 +120,8 @@ yuxStorage.getItem(key).then(value => {
     <p>参数不合法时会报错</p>
     <button class="ui-button" data-type="success" onclick="gets({})">获取key：{}</button>
     <button class="ui-button" data-type="primary" onclick="sets('M', function(){})">设置 M = function(){}</button>
-    <script src="./yux-storage.js"></script>
-    <script>
+    <script type="module">
+        import yuxStorage from './yux-storage.js'
         function equal(a, b) {
             if (a === b) return true;
 

@@ -22,16 +22,18 @@ yux-storage 是一个基于 HTML5 [IndexedDB](https://developer.mozilla.org/zh-C
 
 ### 安装
 
-1. 直接在 [github](https://github.com/yued-fe/yux-storage) 获取 yux-storage.js （推荐）
+1. 直接在 [github](https://github.com/yued-fe/yux-storage) 获取 yux-storage.js
 
 ```html
-<script src="yux-storage.js"></script>
+<script type="module" src="yux-storage.js"></script>
 ```
+
+> 注意，`script`标签需要添加`type="module"`属性
 
 2. 直接使用 unpkg [在线链接](https://unpkg.com/yux-storage)
 
 ```html
-<script src="https://unpkg.com/yux-storage"></script>
+<script type="module" src="https://unpkg.com/yux-storage"></script>
 ```
 
 3. 通过 [npm](https://www.npmjs.com/package/yux-storage) 安装
@@ -48,6 +50,14 @@ npm i yux-storage
 
 ```js
 import yuxStorage from 'yux-storage';
+```
+
+现在浏览器也可以通过这种方式引入
+
+```html
+<script type="module">
+    import yuxStorage from './yux-storage.js'
+</script>
 ```
 
 在页面中使用
@@ -124,6 +134,15 @@ try {
 } catch (error) {
     console.log('出错了',err)
 }
+```
+
+## 多数据库
+
+默认情况下会创建名为`yux-project`的数据库，如果有多数据库需求，可以通过`YuxDB`自行创建
+
+```js
+import { YuxDB } from 'yuxStorage'
+const MyStorage = new YuxDB('test')
 ```
 
 ## API

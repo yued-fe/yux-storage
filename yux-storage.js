@@ -6,7 +6,7 @@
  * Update: 21-03-13
  */
 
-class yuxDB {
+ export class YuxDB {
 
     constructor(projectName) {
         this.ready(projectName);
@@ -132,8 +132,5 @@ class yuxDB {
     }
 }
 
-if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-    module.exports = new yuxDB();
-} else {
-    window.yuxStorage = new yuxDB();
-}
+window.yuxStorage = new YuxDB()
+export default window.yuxStorage;
