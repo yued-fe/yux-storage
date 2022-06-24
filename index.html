@@ -188,7 +188,9 @@ yuxStorage.getItem(key).then(value => {
             console.log(type, detail)
         })
 
-        const MyStorage = new YuxDB('test2022')
+        const MyStorage = new YuxDB('自定义')
+
+        MyStorage.setItem('xxx', '我是test2022')
     </script>
 </body>
 

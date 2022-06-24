@@ -8,11 +8,12 @@
 
  export class YuxDB {
 
-    constructor(projectName) {
+    constructor(projectName = 'yux-project') {
+        this.projectName = projectName;
         this.ready(projectName);
     }
 
-    ready(projectName='yux-project') {
+    ready(projectName=this.projectName) {
         return new Promise((resolve, reject) => {
             if (this.db) {
                 resolve(this);
