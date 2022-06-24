@@ -124,7 +124,7 @@ yuxStorage.getItem(key).then(value => {
     <button class="ui-button" data-type="primary" onclick="sets('M', function(){})">设置 M = function(){}</button>
     <script type="module">
         import yuxStorage, { YuxDB } from './yux-storage.js'
-        function gets(key) {
+        window.gets = (key) => {
             yuxStorage.getItem(key).then(res => {
                 console.log(key, '=>', res)
                 new LightTip().success(JSON.stringify(key)+': '+Object.prototype.toString.call(res)+ ' '+JSON.stringify(res));
@@ -134,7 +134,7 @@ yuxStorage.getItem(key).then(value => {
             })
         }
 
-        function sets(key, value) {
+        window.sets = (key, value) => {
             yuxStorage.setItem(key, value).then(res => {
                 console.log(key, '设置完成')
                 new LightTip().success('设置完成');
@@ -144,7 +144,7 @@ yuxStorage.getItem(key).then(value => {
             })
         }
 
-        function removes(key) {
+        window.removes = (key) => {
             yuxStorage.removeItem(key).then(res => {
                 console.log(key, '已被移除')
                 new LightTip().success(JSON.stringify(key)+'已被移除');
@@ -154,7 +154,7 @@ yuxStorage.getItem(key).then(value => {
             })
         }
 
-        function clearStorage() {
+        window.clearStorage = () => {
             yuxStorage.clear().then(res => {
                 console.log('数据已清空')
                 new LightTip().success('数据已清空');
@@ -164,14 +164,14 @@ yuxStorage.getItem(key).then(value => {
             })
         }
 
-        function key(index) {
+        window.key = (index) => {
             yuxStorage.key(index).then(res => {
                 console.log(index, '=>', res)
                 new LightTip().success(`第${index}个键: `+JSON.stringify(res));
             })
         }
 
-        function keys() {
+        window.keys = () => {
             yuxStorage.keys().then(res => {
                 console.log('全部键', res)
                 new LightTip().success('全部键: '+JSON.stringify(res));
