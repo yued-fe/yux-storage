@@ -145,6 +145,8 @@ import { YuxDB } from 'yuxStorage'
 const MyStorage = new YuxDB('test')
 ```
 
+> 在多账号下本地储存比较有用
+
 ## API
 
 获取或设置离线仓库中的数据的 API。风格参考 [localStorage API](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/localStorage)
@@ -314,9 +316,9 @@ yuxStorage.keys().then(function(keyNames) {
 如果想监听数据的更新，可以使用`addEventListener`方法，`setItem`、`removeItem`、`clear` 都会触发回调
 
 ```js
-yuxStorage.addEventListener((type, data) => {
-    console.log(type, data)
-    // ‘setItem’, '{key, value}'
+yuxStorage.addEventListener((type, data, projectName) => {
+    console.log(type, data, projectName)
+    // ‘setItem’, '{key, value}', 'yux-project'
 })
 ```
 
@@ -325,9 +327,9 @@ yuxStorage.addEventListener((type, data) => {
 ```js
 document.addEventListener('yuxStorage', ev => {
     // 自定义事件的数据在 ev.detail
-    const [type, data] = ev.detail;
-    console.log(type, data)
-    // ‘setItem’, '{key, value}'
+    const [type, data, projectName] = ev.detail;
+    console.log(type, data, projectName)
+    // ‘setItem’, '{key, value}', 'yux-project'
 })
 ```
 

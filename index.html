@@ -178,14 +178,14 @@ yuxStorage.getItem(key).then(value => {
             }).catch(err => console.log(err))
         }
 
-        yuxStorage.addEventListener((type, data) => {
-            console.log(type, data)
+        yuxStorage.addEventListener((type, data, projectName) => {
+            console.log(type, data, projectName)
             pre_c.innerHTML = JSON.stringify(data)
         })
 
         document.addEventListener('yuxStorage', ev => {
-            const [type, detail] = ev.detail;
-            console.log(type, detail)
+            const [type, data, projectName] = ev.detail;
+            console.log(type, data, projectName)
         })
 
         const MyStorage = new YuxDB('自定义')

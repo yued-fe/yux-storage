@@ -79,7 +79,7 @@
             const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).put(value, key);
             request.onsuccess = () => {
                 success(value);
-                this.triggerEvent('setItem',{key,value});
+                this.triggerEvent('setItem',{key,value},this.projectName);
             };
             request.onerror = error;
             // this.dispatchEvent(new CustomEvent('update'))
@@ -99,7 +99,7 @@
             const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).delete(key);
             request.onsuccess = () => {
                 success(key);
-                this.triggerEvent('removeItem',{key});
+                this.triggerEvent('removeItem',{key},this.projectName);
             };
             request.onerror = error;
         }, callback)
@@ -126,7 +126,7 @@
             const request = this.db.transaction(this.objectStoreName, 'readwrite').objectStore(this.objectStoreName).clear();
             request.onsuccess = () => {
                 success(null);
-                this.triggerEvent('clear',{key});
+                this.triggerEvent('clear',{ },this.projectName);
             };;
             request.onerror = error;
         }, callback)
